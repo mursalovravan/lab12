@@ -414,13 +414,14 @@
               </div>
               <button type="submit" id="submitForm">Submit</button>
             </form>
+            
 </section>
 
-  <div class="results" id="results" style="display: none;">
-    <h2>Form Results</h2>
-    <div id="resultsContent"></div>
-    <p class="average-result" id="averageResult"></p>
-  </div>
+<div class="results" id="results" style="display: none;">
+  <h2>Form Results</h2>
+  <div id="resultsContent"></div>
+  <p class="average-result" id="averageResult"></p>
+</div>
 
       </div>
 
@@ -497,7 +498,6 @@
 
   <!-- Vendor JS Files -->
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
   <script src="assets/vendor/aos/aos.js"></script>
   <script src="assets/vendor/typed.js/typed.umd.js"></script>
   <script src="assets/vendor/waypoints/noframework.waypoints.js"></script>
@@ -511,6 +511,66 @@
   <script src="assets/js/main.js"></script>
   <script src="assets/js/theme-toggle.js"></script>
   <script src="assets/js/clock.js"></script>
+  <script>
+    document.getElementById("contactForm").addEventListener("submit", function (e) {
+      console.log("Submit event triggered");
+      e.preventDefault(); // Prevent default form submission
+  
+      const emailInput = document.getElementById("email");
+      const emailError = document.getElementById("emailError");
+      const emailValue = emailInput.value;
+  
+      // Check if the email contains "@"
+      if (!emailValue.includes("@")) {
+        emailError.textContent = "Email must include an '@' symbol.";
+        emailError.style.display = "block";
+        emailInput.classList.add("error");
+      } else {
+        // If valid, remove error styles and message
+        emailError.textContent = "";
+        emailError.style.display = "none";
+        emailInput.classList.remove("error");
+  
+        // Retrieve other form values
+        const firstNameValue = document.getElementById("firstName").value;
+        const lastNameValue = document.getElementById("lastName").value;
+        const phoneValue = document.getElementById("phone").value;
+        const q1Value = parseInt(document.getElementById("q1").value, 10);
+        const q2Value = parseInt(document.getElementById("q2").value, 10);
+        const q3Value = parseInt(document.getElementById("q3").value, 10);
+        const q4Value = parseInt(document.getElementById("q4").value, 10);
+        const q5Value = parseInt(document.getElementById("q5").value, 10);
+  
+        // Calculate average
+        const average = (q1Value + q2Value + q3Value + q4Value + q5Value) / 5;
+  
+        // Update the results section
+        const resultsDiv = document.getElementById("results");
+        const resultsContent = document.getElementById("resultsContent");
+        const averageResult = document.getElementById("averageResult");
+  
+        resultsContent.innerHTML = `
+          <p><strong>First Name:</strong> ${firstNameValue}</p>
+          <p><strong>Last Name:</strong> ${lastNameValue}</p>
+          <p><strong>Email:</strong> ${emailValue}</p>
+          <p><strong>Phone:</strong> ${phoneValue}</p>
+          <p><strong>Q1:</strong> ${q1Value}</p>
+          <p><strong>Q2:</strong> ${q2Value}</p>
+          <p><strong>Q3:</strong> ${q3Value}</p>
+          <p><strong>Q4:</strong> ${q4Value}</p>
+          <p><strong>Q5:</strong> ${q5Value}</p>
+        `;
+  
+        averageResult.textContent = "Average rating: " + average.toFixed(2);
+  
+        // Show the results section
+        resultsDiv.style.display = "block";
+  
+        // Reset form if desired
+        document.getElementById("contactForm").reset();
+      }
+    });
+  </script>
 
 
 </body>
